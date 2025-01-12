@@ -61,11 +61,18 @@ export function MainNav() {
               </Button>
             </SignInButton>
             <Button asChild size="sm">
-              <Link href="/signup">Sign Up</Link>
+              <Link href="/sign-up">Sign Up</Link>
             </Button>
           </SignedOut>
           <SignedIn>
-            <UserButton afterSignOutUrl="/" />
+            <UserButton 
+              afterSignOutUrl="/"
+              appearance={{
+                elements: {
+                  avatarBox: "w-8 h-8"
+                }
+              }}
+            />
           </SignedIn>
         </div>
       </div>
