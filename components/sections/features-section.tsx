@@ -21,9 +21,9 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="max-w-7xl mx-auto px-4 py-24 md:py-32 space-y-16">
+    <section id="features" className="max-w-7xl mx-auto px-4 py-12 md:py-16 space-y-16">
       <h2 className="text-3xl font-bold tracking-tighter text-center sm:text-4xl md:text-5xl">
-        Why Use comparemodels.ai?
+        Why Use CompareModels.ai?
       </h2>
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
         {features.map((feature, i) => (

@@ -9,14 +9,14 @@ generator client {
 }
 
 model User {
-    id               String         @id @default(cuid())
-    email            String         @unique
+    id               String          @id @default(cuid())
+    email            String          @unique
     name             String?
-    stripeCustomerId String?        @unique
-    createdAt        DateTime       @default(now())
-    updatedAt        DateTime       @updatedAt
+    stripeCustomerId String?         @unique
+    createdAt        DateTime        @default(now())
+    updatedAt        DateTime        @updatedAt
     subscription     Subscription?
-    credits          CreditBalance?
+    creditBalance    CreditBalance[]
     usageHistory     Usage[]
     apiKeys          ApiKey[]
 }
@@ -40,9 +40,9 @@ model Subscription {
 
 model CreditBalance {
     id           String   @id @default(cuid())
-    userId       String   @unique
-    user         User     @relation(fields: [userId], references: [id])
-    balance      Int      @default(1000) // Free tier starting credits
+    userId       String
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    balance      Int      @default(1000)
     lastRefillAt DateTime @default(now())
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt

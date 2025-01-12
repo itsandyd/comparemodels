@@ -1,6 +1,12 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Check } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
+import axios from "axios"
 
 const plans = [
   {
@@ -35,25 +41,55 @@ const plans = [
   }
 ]
 
-const additionalCredits = [
-  {
-    amount: "5,000",
-    price: "$12",
-    costPerRequest: "$0.0024"
-  },
-  {
-    amount: "10,000",
-    price: "$20",
-    costPerRequest: "$0.002"
-  },
-  {
-    amount: "50,000",
-    price: "$90",
-    costPerRequest: "$0.0018"
-  }
-]
+// const additionalCredits = [
+//   {
+//     amount: "5,000",
+//     price: "$12",
+//     costPerRequest: "$0.0024"
+//   },
+//   {
+//     amount: "10,000",
+//     price: "$20",
+//     costPerRequest: "$0.002"
+//   },
+//   {
+//     amount: "50,000",
+//     price: "$90",
+//     costPerRequest: "$0.0018"
+//   }
+// ]
 
 export function PricingSection() {
+  const router = useRouter();
+  const [loading, setLoading] = useState<string | null>(null);
+
+  const onSubscribe = async (planName: string) => {
+    try {
+      setLoading(planName);
+
+      if (planName === "Free") {
+        await axios.post("/api/stripe/free-tier");
+        toast.success("Free tier activated!");
+        router.push("/compare");
+        return;
+      }
+
+      const { data } = await axios.post("/api/stripe/create-checkout", {
+        plan: planName.toUpperCase(),
+      });
+
+      window.location.href = data.url;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data || "Something went wrong, please try again.");
+      } else {
+        toast.error("Something went wrong, please try again.");
+      }
+    } finally {
+      setLoading(null);
+    }
+  };
+
   return (
     <section className="py-24">
       <div className="container mx-auto px-4 md:px-6">
@@ -94,15 +130,20 @@ export function PricingSection() {
                 </ul>
               </div>
               <div className="mt-6 w-full">
-                <Button className="w-full" variant={plan.popular ? "default" : "outline"}>
-                  Get Started
+                <Button 
+                  onClick={() => onSubscribe(plan.name)}
+                  disabled={loading === plan.name}
+                  className="w-full" 
+                  variant={plan.popular ? "default" : "outline"}
+                >
+                  {loading === plan.name ? "Loading..." : "Get Started"}
                 </Button>
               </div>
             </Card>
           ))}
         </div>
 
-        <div className="mt-24 max-w-5xl mx-auto">
+        {/* <div className="mt-24 max-w-5xl mx-auto">
           <h3 className="text-2xl font-bold text-center mb-8">Need Additional Credits?</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {additionalCredits.map((pack) => (
@@ -120,7 +161,7 @@ export function PricingSection() {
               </Card>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   )
