@@ -98,7 +98,7 @@ export function PricingSection() {
             Simple, Transparent Pricing
           </h2>
           <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl">
-            Choose the plan that&apos;s right for you. All plans include access to our API and dashboard.
+            Choose the plan that&apos;s right for you.
           </p>
         </div>
 
