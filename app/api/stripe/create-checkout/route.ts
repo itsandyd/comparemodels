@@ -4,7 +4,7 @@ import { stripe } from "@/lib/stripe";
 import { absoluteUrl } from "@/lib/utils";
 import { db } from "@/lib/db";
 
-const returnUrl = absoluteUrl("/settings");
+const returnUrl = absoluteUrl("/");
 
 export async function POST(req: Request) {
   try {

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import axios from "axios"
+import { useAuth } from "@clerk/nextjs"
 
 const plans = [
   {
@@ -62,8 +63,15 @@ const plans = [
 export function PricingSection() {
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
+  const { userId } = useAuth();
 
   const onSubscribe = async (planName: string) => {
+    if (!userId) {
+      toast.error("Please log in to continue");
+      router.push("/sign-in");
+      return;
+    }
+
     try {
       setLoading(planName);
 
